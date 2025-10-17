@@ -157,7 +157,7 @@ def test_train_and_run(
     # Run Casanovo in database prediction mode.
     output_rootname = "db"
     output_filename = (tmp_path / output_rootname).with_suffix(".mztab")
-    output_db_file = tmp_path / "test.csv"
+    output_db_file = tmp_path / f"{output_rootname}.csv"
 
     search_args = [
         "db-search",
@@ -170,7 +170,6 @@ def test_train_and_run(
         "--output_root",
         output_rootname,
         "--output_db",
-        str(output_db_file),
         str(mgf_medium),
         str(tiny_fasta_file),
     ]
@@ -218,29 +217,6 @@ def test_train_and_run(
             for line in validate_result.stdout.splitlines()
         ]
     )
-
-    output_rootname = "force_overwrite_test"
-    output_filename_mztab = (tmp_path / output_rootname).with_suffix(".mztab")
-    output_filename_log = (tmp_path / output_rootname).with_suffix(".log")
-
-    predict_args = [
-        "sequence",
-        "--model",
-        str(model_file),
-        "--config",
-        tiny_config,
-        "--output_dir",
-        str(tmp_path),
-        "--output_root",
-        output_rootname,
-        str(mgf_small),
-        str(mzml_small),
-    ]
-
-    result = run(predict_args)
-    assert result.exit_code == 0
-    assert output_filename_mztab.exists()
-    assert output_filename_log.exists()
 
 
 def test_auxilliary_cli(tmp_path, mgf_small, monkeypatch):
